@@ -1,0 +1,28 @@
+﻿<Window x:Class="WpfPasswordManager.AccountDetailsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfPasswordManager"
+        mc:Ignorable="d"
+        Title="AccountDetailsWindow" Height="300" Width="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="25" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <TextBlock>Title:</TextBlock>
+        <TextBox Grid.Column="1" Name="titleField"/>
+        <TextBlock Grid.Row="1">User Name:</TextBlock>
+        <TextBox Grid.Row="1"  Grid.Column="1" Name="usernameField"/>
+        <TextBlock Grid.Row="2">Password:</TextBlock>
+        <PasswordBox Grid.Row="2" Grid.Column="1" Name="passwordField"/>
+        <Button Click="onSaveBtnClicked" Grid.Row="3" Grid.Column="1">Save</Button>
+    </Grid>
+</Window>
