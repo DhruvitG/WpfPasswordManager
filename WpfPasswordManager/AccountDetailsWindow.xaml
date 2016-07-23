@@ -12,6 +12,7 @@
             <RowDefinition Height="25" />
             <RowDefinition Height="25" />
             <RowDefinition Height="25" />
+            <RowDefinition Height="25" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -22,8 +23,10 @@
         <TextBlock Grid.Row="1">User Name:</TextBlock>
         <TextBox Grid.Row="1"  Grid.Column="1" Name="usernameField"/>
         <TextBlock Grid.Row="2">Password:</TextBlock>
+        <TextBox Grid.Row="2" Grid.Column="1" Name="textPasswordField" Visibility="Hidden"/>
         <PasswordBox Grid.Row="2" Grid.Column="1" Name="passwordField"/>
-        <Button Click="onCancelBtnClicked" Grid.Row="3" Grid.Column="0">Cancel</Button>
-        <Button Click="onSaveBtnClicked" Grid.Row="3" Grid.Column="1">Save</Button>
+        <CheckBox Grid.Row="3" Grid.Column="1" Name="passwordCheckBox" Click="onCheckBoxClicked">Show Password</CheckBox>
+        <Button Click="onCancelBtnClicked" Grid.Row="4" Grid.Column="0">Cancel</Button>
+        <Button Click="onSaveBtnClicked" Grid.Row="4" Grid.Column="1">Save</Button>
     </Grid>
 </Window>

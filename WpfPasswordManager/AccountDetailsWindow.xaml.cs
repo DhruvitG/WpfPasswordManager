@@ -50,13 +50,14 @@ namespace WpfPasswordManager
         public void onSaveBtnClicked(object sender, RoutedEventArgs e)
         {
             SQLiteDbHelper sqLiteDbHelper = SQLiteDbHelper.getInstance();
+            String passwordText = this.getPasswordFieldText();
             if (this.currentState == State.Add)
             {
-                sqLiteDbHelper.insert(titleField.Text, usernameField.Text, passwordField.Password);
+                sqLiteDbHelper.insert(titleField.Text, usernameField.Text, passwordText);
             }
             else
             {
-                AccountDetails updatedAccountDetails = new AccountDetails(this.accountDetails.Id, titleField.Text, usernameField.Text, passwordField.Password);
+                AccountDetails updatedAccountDetails = new AccountDetails(this.accountDetails.Id, titleField.Text, usernameField.Text, passwordText);
                 sqLiteDbHelper.update(updatedAccountDetails);
             }
             
@@ -68,6 +69,37 @@ namespace WpfPasswordManager
             titleField.Text = accountDetails.Title;
             usernameField.Text = accountDetails.Username;
             passwordField.Password = accountDetails.Password;
+        }
+
+        public void onCheckBoxClicked(object sender, RoutedEventArgs e)
+        {
+            if (passwordCheckBox.IsChecked.HasValue)
+            {
+                if ((bool)passwordCheckBox.IsChecked)
+                {
+                    textPasswordField.Text = passwordField.Password;
+                    passwordField.Visibility = Visibility.Hidden;
+                    textPasswordField.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    passwordField.Password = textPasswordField.Text;
+                    textPasswordField.Visibility = Visibility.Hidden;
+                    passwordField.Visibility = Visibility.Visible;
+                }
+            }
+        }
+
+        public String getPasswordFieldText()
+        {
+            if (passwordCheckBox.IsChecked.HasValue && (bool)passwordCheckBox.IsChecked)
+            {
+                return textPasswordField.Text;                
+            }
+            else
+            {
+                return passwordField.Password;
+            }
         }
     }
 }
