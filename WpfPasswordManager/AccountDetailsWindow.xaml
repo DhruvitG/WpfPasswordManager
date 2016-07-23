@@ -23,6 +23,7 @@
         <TextBox Grid.Row="1"  Grid.Column="1" Name="usernameField"/>
         <TextBlock Grid.Row="2">Password:</TextBlock>
         <PasswordBox Grid.Row="2" Grid.Column="1" Name="passwordField"/>
+        <Button Click="onCancelBtnClicked" Grid.Row="3" Grid.Column="0">Cancel</Button>
         <Button Click="onSaveBtnClicked" Grid.Row="3" Grid.Column="1">Save</Button>
     </Grid>
 </Window>

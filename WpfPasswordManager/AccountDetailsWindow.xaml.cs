@@ -42,6 +42,11 @@ namespace WpfPasswordManager
             }
         }
 
+        public void onCancelBtnClicked(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
         public void onSaveBtnClicked(object sender, RoutedEventArgs e)
         {
             SQLiteDbHelper sqLiteDbHelper = SQLiteDbHelper.getInstance();

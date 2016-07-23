@@ -44,7 +44,17 @@ namespace WpfPasswordManager
         public void showAllAccounts()
         {
             List<AccountTitle> accountTitles = this.sqLiteDbHelper.selectTitles();
-            lvDataBinding.ItemsSource = accountTitles;
+            if(accountTitles.Count > 0)
+            {
+                NoAccountsTextField.Visibility = Visibility.Hidden;
+                accountListView.Visibility = Visibility.Visible;
+                accountListView.ItemsSource = accountTitles;
+            }
+            else
+            {
+                NoAccountsTextField.Visibility = Visibility.Visible;
+                accountListView.Visibility = Visibility.Hidden;
+            }            
         }
 
         public void onEditBtnClicked(object sender, RoutedEventArgs e)

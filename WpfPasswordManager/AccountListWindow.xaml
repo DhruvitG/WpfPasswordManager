@@ -14,12 +14,12 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <ListView Name="lvDataBinding">
+        <TextBlock Name="NoAccountsTextField" HorizontalAlignment="Center">No saved accounts</TextBlock>
+        <ListView Visibility="Hidden" Name="accountListView">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <WrapPanel>
-                        <TextBlock Name="accountId" Text="{Binding id}" Width="30"/>
-                        <TextBlock Margin="10,0,0,0" Name="accountTitle" Text="{Binding title}"/>
+                        <TextBlock Margin="0,0,0,0" Name="accountTitle" Text="{Binding title}"/>
                         <Button Click="onEditBtnClicked">Edit</Button>
                         <Button Click="onDeleteBtnClicked">Delete</Button>
                     </WrapPanel>
