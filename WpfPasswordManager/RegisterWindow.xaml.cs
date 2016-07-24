@@ -60,7 +60,8 @@ namespace WpfPasswordManager
 
         private void saveData(String username, String password)
         {
-            ConfigurationManager.AppSettings.Set(username, password);
+            SQLiteDbHelper sqliteDbHelper = SQLiteDbHelper.getInstance();
+            sqliteDbHelper.insertUser(username, password);
         }
 
         private void clearFields(TextBox usernameTextBox, PasswordBox passwordBox, PasswordBox confirmPasswordBox)

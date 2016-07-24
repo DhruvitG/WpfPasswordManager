@@ -23,15 +23,16 @@ namespace WpfPasswordManager
         {
             InitializeComponent();
             //Debug code
-            ConfigurationManager.AppSettings.Set("test", "test");
+            SQLiteDbHelper sqliteDbHelper = SQLiteDbHelper.getInstance();
+            sqliteDbHelper.insertUser("test", "test");
         }
 
         private void onLoginClicked(object sender, RoutedEventArgs e)
         {
             String username = usernameTextBox.Text;
             String password = passwordBox.Password;
-            String value = ConfigurationManager.AppSettings.Get(username);
-            if(password == value)
+            Boolean isValid = this.authenticateUser(username, password);
+            if(isValid)
             {
                 //Close this window and open new window
                 AccountListWindow accountListWindow = new AccountListWindow();
@@ -57,6 +58,20 @@ namespace WpfPasswordManager
         {
             usernameTextBox.Text = "";
             passwordBox.Password = "";
+        }
+
+        private Boolean authenticateUser(String username, String password)
+        {
+            SQLiteDbHelper sqliteDbHelper = SQLiteDbHelper.getInstance();
+            List<User> selectedUsers = sqliteDbHelper.selectUser(username);
+            foreach(User user in selectedUsers)
+            {
+                if(user.Password == password)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
