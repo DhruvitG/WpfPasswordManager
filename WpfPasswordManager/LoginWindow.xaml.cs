@@ -23,8 +23,8 @@ namespace WpfPasswordManager
         {
             InitializeComponent();
             //Debug code
-            SQLiteDbHelper sqliteDbHelper = SQLiteDbHelper.getInstance();
-            sqliteDbHelper.insertUser("test", "test");
+            //SQLiteDbHelper sqliteDbHelper = SQLiteDbHelper.getInstance();
+            //sqliteDbHelper.insertUser("test", "test");
         }
 
         private void onLoginClicked(object sender, RoutedEventArgs e)
@@ -66,7 +66,7 @@ namespace WpfPasswordManager
             List<User> selectedUsers = sqliteDbHelper.selectUser(username);
             foreach(User user in selectedUsers)
             {
-                if(user.Password == password)
+                if(CryptoHelper.ValidatePassword(password, user.Hash, user.Salt))
                 {
                     return true;
                 }

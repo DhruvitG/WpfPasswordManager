@@ -20,8 +20,8 @@ namespace WpfPasswordManager
         String delete_account = "DELETE FROM accounts WHERE id=";
 
         // PassManager Table
-        String create_users_table = "CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username VARCHAR(20), password VARCHAR(20))";
-        String insert_user = "INSERT INTO users (username, password) VALUES";
+        String create_users_table = "CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username VARCHAR(20), hash TEXT, salt TEXT)";
+        String insert_user = "INSERT INTO users (username, hash, salt) VALUES";
         String select_user = "SELECT * FROM users WHERE username=";
 
         public static SQLiteDbHelper getInstance()
@@ -118,11 +118,14 @@ namespace WpfPasswordManager
             this.dbConnection.Close();
         }
 
-        public void insertUser(String username, String password)
+        public void insertUser(String username, byte[] hash, byte[] salt)
         {
             this.dbConnection.Open();
 
-            String insertSql = this.insert_user + "('" + username + "','" + password + "')";
+            String hashString = Convert.ToBase64String(hash);
+            String saltString = Convert.ToBase64String(salt);
+
+            String insertSql = this.insert_user + "('" + username + "','" + hashString + "','" + saltString + "')";
             SQLiteCommand command = new SQLiteCommand(insertSql, dbConnection);
             command.ExecuteNonQuery();
 
@@ -142,7 +145,8 @@ namespace WpfPasswordManager
                 User user = new User();
                 user.Id = (long)reader["id"];
                 user.Username = (String)reader["username"];
-                user.Password = (String)reader["password"];
+                user.Hash = (String)reader["hash"];
+                user.Salt = (String)reader["salt"];
                 users.Add(user);
             }
             this.dbConnection.Close();

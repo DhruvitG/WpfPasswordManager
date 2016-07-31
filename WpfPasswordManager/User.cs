@@ -10,7 +10,8 @@ namespace WpfPasswordManager
     {
         long id;
         String username;
-        String password;
+        String hash;
+        String salt;
 
         public long Id
         {
@@ -38,16 +39,29 @@ namespace WpfPasswordManager
             }
         }
 
-        public string Password
+        public string Hash
         {
             get
             {
-                return password;
+                return hash;
             }
 
             set
             {
-                password = value;
+                hash = value;
+            }
+        }
+
+        public string Salt
+        {
+            get
+            {
+                return salt;
+            }
+
+            set
+            {
+                salt = value;
             }
         }
 
@@ -56,11 +70,11 @@ namespace WpfPasswordManager
 
         }
 
-        public User(long id, String username, String password)
+        public User(long id, String username, String hash)
         {
             Id = id;
             Username = username;
-            Password = password;
+            Hash = hash;
         }
     }
 }

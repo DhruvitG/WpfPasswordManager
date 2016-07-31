@@ -61,7 +61,9 @@ namespace WpfPasswordManager
         private void saveData(String username, String password)
         {
             SQLiteDbHelper sqliteDbHelper = SQLiteDbHelper.getInstance();
-            sqliteDbHelper.insertUser(username, password);
+            byte[] salt = CryptoHelper.generateSalt();
+            byte[] hash = CryptoHelper.HashPassword(password, salt);
+            sqliteDbHelper.insertUser(username, hash, salt);
         }
 
         private void clearFields(TextBox usernameTextBox, PasswordBox passwordBox, PasswordBox confirmPasswordBox)
