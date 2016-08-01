@@ -12,8 +12,8 @@ namespace WpfPasswordManager
         private static SQLiteDbHelper instance = null;
         SQLiteConnection dbConnection;
         // Account Table
-        String create_accounts_table = "CREATE TABLE accounts (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, user_id INTEGER NOT NULL, title VARCHAR(20), username VARCHAR(20), password VARCHAR(20))";
-        String insert_account_into_table = "INSERT INTO accounts (user_id, title, username, password) VALUES";
+        String create_accounts_table = "CREATE TABLE accounts (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, user_id INTEGER NOT NULL, title VARCHAR(20), username VARCHAR(20), encrypted_password TEXT, salt TEXT)";
+        String insert_account_into_table = "INSERT INTO accounts (user_id, title, username, encrypted_password, salt) VALUES";
         String select_titles = "SELECT id, title FROM accounts WHERE user_id=";
         String select_account_with_id = "SELECT * FROM accounts WHERE id=";
         String update_account = "UPDATE accounts SET ";
@@ -23,6 +23,7 @@ namespace WpfPasswordManager
         String create_users_table = "CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username VARCHAR(20), hash TEXT, salt TEXT)";
         String insert_user = "INSERT INTO users (username, hash, salt) VALUES";
         String select_user = "SELECT * FROM users WHERE username=";
+        String select_hash = "SELECT hash FROM users WHERE id=";
 
         public static SQLiteDbHelper getInstance()
         {
@@ -52,11 +53,11 @@ namespace WpfPasswordManager
             this.dbConnection.Close();
         }
 
-        public void insert(long userId, String title, String username, String password)
+        public void insert(long userId, String title, String username, String encryptedPassword, String salt)
         {
             this.dbConnection.Open();
 
-            String insertSql = this.insert_account_into_table + "('" + userId + "','" + title + "','" + username + "','" + password + "')"; 
+            String insertSql = this.insert_account_into_table + "('" + userId + "','" + title + "','" + username + "','" + encryptedPassword + "','" + salt + "')"; 
             SQLiteCommand command = new SQLiteCommand(insertSql, dbConnection);
             command.ExecuteNonQuery();
 
@@ -94,7 +95,8 @@ namespace WpfPasswordManager
                 accountDetails.Id = (long)reader["id"];
                 accountDetails.Title = (String)reader["title"];
                 accountDetails.Username = (String)reader["username"];
-                accountDetails.Password = (String)reader["password"];
+                accountDetails.EncryptedPassword = (String)reader["encrypted_password"];
+                accountDetails.Salt = (String)reader["salt"];
             }
             this.dbConnection.Close();
             return accountDetails;
@@ -104,7 +106,7 @@ namespace WpfPasswordManager
         {
             this.dbConnection.Open();
 
-            String updateSql = this.update_account + "title='" + accountDetails.Title + "',username='" + accountDetails.Username + "',password='" + accountDetails.Password + "' WHERE id=" + accountDetails.Id + " AND user_id=" + userId;
+            String updateSql = this.update_account + "title='" + accountDetails.Title + "',username='" + accountDetails.Username + "',encrypted_password='" + accountDetails.EncryptedPassword + "',salt='" + accountDetails.Salt + "' WHERE id=" + accountDetails.Id + " AND user_id=" + userId;
             SQLiteCommand command = new SQLiteCommand(updateSql, dbConnection);
             command.ExecuteNonQuery();
             this.dbConnection.Close();
@@ -153,6 +155,22 @@ namespace WpfPasswordManager
             }
             this.dbConnection.Close();
             return users;
+        }
+
+        public String getUserHash(long userId)
+        {
+            this.dbConnection.Open();
+
+            String sql = this.select_hash + "'" + userId + "'";
+            SQLiteCommand command = new SQLiteCommand(sql, dbConnection);
+            SQLiteDataReader reader = command.ExecuteReader();
+            String hash = "";
+            while (reader.Read())
+            {
+                hash = (String)reader["hash"];
+            }
+            this.dbConnection.Close();
+            return hash;
         }
     }
 }

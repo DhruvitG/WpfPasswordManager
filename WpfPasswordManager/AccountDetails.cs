@@ -12,6 +12,8 @@ namespace WpfPasswordManager
         String title;
         String username;
         String password;
+        String encryptedPassword;
+        String salt;
 
         public long Id
         {
@@ -65,14 +67,45 @@ namespace WpfPasswordManager
             }
         }
 
+        public string EncryptedPassword
+        {
+            get
+            {
+                return encryptedPassword;
+            }
+
+            set
+            {
+                encryptedPassword = value;
+            }
+        }
+
+        public string Salt
+        {
+            get
+            {
+                return salt;
+            }
+
+            set
+            {
+                salt = value;
+            }
+        }
+
         public AccountDetails() {}
 
-        public AccountDetails(long id, String title, String username, String password)
+        public AccountDetails(long id, String title, String username, String encryptedPassword, String salt)
         {
             this.id = id;
             this.title = title;
             this.username = username;
-            this.password = password;
+            this.encryptedPassword = encryptedPassword;
+            this.salt = salt;
+        }
+        public void decryptPassword(String hash)
+        {
+            this.Password = CryptoHelper.DecryptStringAES(this.EncryptedPassword, hash, Convert.FromBase64String(this.Salt));
         }
     }
 }
