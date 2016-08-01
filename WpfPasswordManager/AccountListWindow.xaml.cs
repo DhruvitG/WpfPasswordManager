@@ -20,17 +20,19 @@ namespace WpfPasswordManager
     public partial class AccountListWindow : Window
     {
         SQLiteDbHelper sqLiteDbHelper;
+        long userId;
 
-        public AccountListWindow()
+        public AccountListWindow(long userId)
         {
             InitializeComponent();
+            this.userId = userId;
             this.sqLiteDbHelper = SQLiteDbHelper.getInstance();
             this.showAllAccounts();
         }
 
         private void onAddAccountBtnClicked(object sender, RoutedEventArgs e)
         {
-            AccountDetailsWindow accountDetailsWindow = new AccountDetailsWindow(AccountDetailsWindow.State.Add);
+            AccountDetailsWindow accountDetailsWindow = new AccountDetailsWindow(AccountDetailsWindow.State.Add, this.userId);
             accountDetailsWindow.Closed += this.onAccountDetailsWindowClosed;
             accountDetailsWindow.Show();
             
@@ -43,7 +45,7 @@ namespace WpfPasswordManager
 
         public void showAllAccounts()
         {
-            List<AccountTitle> accountTitles = this.sqLiteDbHelper.selectTitles();
+            List<AccountTitle> accountTitles = this.sqLiteDbHelper.selectTitles(this.userId);
             if(accountTitles.Count > 0)
             {
                 NoAccountsTextField.Visibility = Visibility.Hidden;
@@ -61,7 +63,7 @@ namespace WpfPasswordManager
         {
             Button editBtn = (Button)sender;
             AccountTitle accountTitle = (AccountTitle)editBtn.DataContext;
-            AccountDetailsWindow accountDetailsWindow = new AccountDetailsWindow(AccountDetailsWindow.State.Edit, accountTitle.id);
+            AccountDetailsWindow accountDetailsWindow = new AccountDetailsWindow(AccountDetailsWindow.State.Edit, accountTitle.id, this.userId);
             accountDetailsWindow.Closed += this.onAccountDetailsWindowClosed;
             accountDetailsWindow.Show();
         }
@@ -70,7 +72,7 @@ namespace WpfPasswordManager
         {
             Button deleteBtn = (Button)sender;
             AccountTitle accountTitle = (AccountTitle)deleteBtn.DataContext;
-            this.sqLiteDbHelper.delete(accountTitle.id);
+            this.sqLiteDbHelper.delete(accountTitle.id, this.userId);
             this.showAllAccounts();
         }
     }

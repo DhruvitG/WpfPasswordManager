@@ -22,22 +22,25 @@ namespace WpfPasswordManager
         State currentState;
         public enum State {Add, Edit};
         public AccountDetails accountDetails;
+        long userId;
 
-        public AccountDetailsWindow(State state)
+        public AccountDetailsWindow(State state, long userId)
         {
             InitializeComponent();
             this.currentState = state;
+            this.userId = userId;
             
         }
 
-        public AccountDetailsWindow(State state, long accountId)
+        public AccountDetailsWindow(State state, long accountId, long userId)
         {
             InitializeComponent();
             this.currentState = state;
+            this.userId = userId;
             if(this.currentState == State.Edit)
             {
                 SQLiteDbHelper sqLiteDbHelper = SQLiteDbHelper.getInstance();
-                this.accountDetails = sqLiteDbHelper.selectWithId(accountId);
+                this.accountDetails = sqLiteDbHelper.selectWithId(accountId, userId);
                 this.fillFields(accountDetails);
             }
         }
@@ -53,12 +56,12 @@ namespace WpfPasswordManager
             String passwordText = this.getPasswordFieldText();
             if (this.currentState == State.Add)
             {
-                sqLiteDbHelper.insert(titleField.Text, usernameField.Text, passwordText);
+                sqLiteDbHelper.insert(this.userId, titleField.Text, usernameField.Text, passwordText);
             }
             else
             {
                 AccountDetails updatedAccountDetails = new AccountDetails(this.accountDetails.Id, titleField.Text, usernameField.Text, passwordText);
-                sqLiteDbHelper.update(updatedAccountDetails);
+                sqLiteDbHelper.update(updatedAccountDetails, this.userId);
             }
             
             this.Close();

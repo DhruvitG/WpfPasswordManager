@@ -12,9 +12,9 @@ namespace WpfPasswordManager
         private static SQLiteDbHelper instance = null;
         SQLiteConnection dbConnection;
         // Account Table
-        String create_accounts_table = "CREATE TABLE accounts (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, title VARCHAR(20), username VARCHAR(20), password VARCHAR(20))";
-        String insert_account_into_table = "INSERT INTO accounts (title, username, password) VALUES";
-        String select_titles = "SELECT id, title FROM accounts";
+        String create_accounts_table = "CREATE TABLE accounts (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, user_id INTEGER NOT NULL, title VARCHAR(20), username VARCHAR(20), password VARCHAR(20))";
+        String insert_account_into_table = "INSERT INTO accounts (user_id, title, username, password) VALUES";
+        String select_titles = "SELECT id, title FROM accounts WHERE user_id=";
         String select_account_with_id = "SELECT * FROM accounts WHERE id=";
         String update_account = "UPDATE accounts SET ";
         String delete_account = "DELETE FROM accounts WHERE id=";
@@ -52,22 +52,24 @@ namespace WpfPasswordManager
             this.dbConnection.Close();
         }
 
-        public void insert(String title, String username, String password)
+        public void insert(long userId, String title, String username, String password)
         {
             this.dbConnection.Open();
 
-            String insertSql = this.insert_account_into_table + "('" + title + "','" + username + "','" + password + "')"; 
+            String insertSql = this.insert_account_into_table + "('" + userId + "','" + title + "','" + username + "','" + password + "')"; 
             SQLiteCommand command = new SQLiteCommand(insertSql, dbConnection);
             command.ExecuteNonQuery();
 
            this.dbConnection.Close();
         }
 
-        public List<AccountTitle> selectTitles()
+        public List<AccountTitle> selectTitles(long userId)
         {
             this.dbConnection.Open();
 
-            SQLiteCommand command = new SQLiteCommand(this.select_titles, dbConnection);
+            String selectTitlesSql = this.select_titles + userId;
+
+            SQLiteCommand command = new SQLiteCommand(selectTitlesSql, dbConnection);
             SQLiteDataReader reader = command.ExecuteReader();
             List<AccountTitle> accountTitles = new List<AccountTitle>();
             while (reader.Read())
@@ -79,11 +81,11 @@ namespace WpfPasswordManager
             return accountTitles;
         }
 
-        public AccountDetails selectWithId(long id)
+        public AccountDetails selectWithId(long id, long userId)
         {
             this.dbConnection.Open();
 
-            String sql = this.select_account_with_id + id;
+            String sql = this.select_account_with_id + id + " AND user_id=" + userId;
             SQLiteCommand command = new SQLiteCommand(sql, dbConnection);
             SQLiteDataReader reader = command.ExecuteReader();
             AccountDetails accountDetails = new AccountDetails();
@@ -98,21 +100,21 @@ namespace WpfPasswordManager
             return accountDetails;
         }
 
-        public void update(AccountDetails accountDetails)
+        public void update(AccountDetails accountDetails, long userId)
         {
             this.dbConnection.Open();
 
-            String updateSql = this.update_account + "title='" + accountDetails.Title + "',username='" + accountDetails.Username + "',password='" + accountDetails.Password + "' WHERE id=" + accountDetails.Id;
+            String updateSql = this.update_account + "title='" + accountDetails.Title + "',username='" + accountDetails.Username + "',password='" + accountDetails.Password + "' WHERE id=" + accountDetails.Id + " AND user_id=" + userId;
             SQLiteCommand command = new SQLiteCommand(updateSql, dbConnection);
             command.ExecuteNonQuery();
             this.dbConnection.Close();
         }
 
-        public void delete(long id)
+        public void delete(long id, long userId)
         {
             this.dbConnection.Open();
 
-            String deleteSql = this.delete_account + id;
+            String deleteSql = this.delete_account + id + " AND user_id=" + userId;
             SQLiteCommand command = new SQLiteCommand(deleteSql, dbConnection);
             command.ExecuteNonQuery();
             this.dbConnection.Close();

@@ -18,6 +18,7 @@ namespace WpfPasswordManager
 {
     public partial class LoginWindow : Window
     {
+        private long userId;
         
         public LoginWindow()
         {
@@ -35,7 +36,7 @@ namespace WpfPasswordManager
             if(isValid)
             {
                 //Close this window and open new window
-                AccountListWindow accountListWindow = new AccountListWindow();
+                AccountListWindow accountListWindow = new AccountListWindow(this.userId);
                 accountListWindow.Show();
                 this.Close();
                 
@@ -68,6 +69,7 @@ namespace WpfPasswordManager
             {
                 if(CryptoHelper.ValidatePassword(password, user.Hash, user.Salt))
                 {
+                    this.userId = user.Id;
                     return true;
                 }
             }
