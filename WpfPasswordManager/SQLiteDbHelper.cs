@@ -13,17 +13,17 @@ namespace WpfPasswordManager
         SQLiteConnection dbConnection;
         // Account Table
         String create_accounts_table = "CREATE TABLE accounts (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, user_id INTEGER NOT NULL, title VARCHAR(20), username VARCHAR(20), encrypted_password TEXT, salt TEXT)";
-        String insert_account_into_table = "INSERT INTO accounts (user_id, title, username, encrypted_password, salt) VALUES";
-        String select_titles = "SELECT id, title FROM accounts WHERE user_id=";
-        String select_account_with_id = "SELECT * FROM accounts WHERE id=";
-        String update_account = "UPDATE accounts SET ";
-        String delete_account = "DELETE FROM accounts WHERE id=";
+        String insert_account_into_table = "INSERT INTO accounts (user_id, title, username, encrypted_password, salt) VALUES(@user_id, @title, @username, @encrypted_password, @salt)";
+        String select_titles = "SELECT id, title FROM accounts WHERE user_id=@user_id";
+        String select_account_with_id = "SELECT * FROM accounts WHERE id=@id AND user_id=@user_id";
+        String update_account = "UPDATE accounts SET title=@title, username=@username, encrypted_password=@encrypted_password, salt=@salt WHERE id=@id AND user_id=@user_id";
+        String delete_account = "DELETE FROM accounts WHERE id=@id AND user_id=@user_id";
 
         // PassManager Table
         String create_users_table = "CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username VARCHAR(20), hash TEXT, salt TEXT)";
-        String insert_user = "INSERT INTO users (username, hash, salt) VALUES";
-        String select_user = "SELECT * FROM users WHERE username=";
-        String select_hash = "SELECT hash FROM users WHERE id=";
+        String insert_user = "INSERT INTO users (username, hash, salt) VALUES(@username, @hash, @salt)";
+        String select_user = "SELECT * FROM users WHERE username=@username";
+        String select_hash = "SELECT hash FROM users WHERE id=@id";
 
         public static SQLiteDbHelper getInstance()
         {
@@ -56,9 +56,13 @@ namespace WpfPasswordManager
         public void insert(long userId, String title, String username, String encryptedPassword, String salt)
         {
             this.dbConnection.Open();
-
-            String insertSql = this.insert_account_into_table + "('" + userId + "','" + title + "','" + username + "','" + encryptedPassword + "','" + salt + "')"; 
-            SQLiteCommand command = new SQLiteCommand(insertSql, dbConnection);
+            
+            SQLiteCommand command = new SQLiteCommand(this.insert_account_into_table, dbConnection);
+            command.Parameters.Add(new SQLiteParameter("@user_id", userId));
+            command.Parameters.Add(new SQLiteParameter("@title", title));
+            command.Parameters.Add(new SQLiteParameter("@username", username));
+            command.Parameters.Add(new SQLiteParameter("@encrypted_password", encryptedPassword));
+            command.Parameters.Add(new SQLiteParameter("@salt", salt));
             command.ExecuteNonQuery();
 
            this.dbConnection.Close();
@@ -67,10 +71,9 @@ namespace WpfPasswordManager
         public List<AccountTitle> selectTitles(long userId)
         {
             this.dbConnection.Open();
-
-            String selectTitlesSql = this.select_titles + userId;
-
-            SQLiteCommand command = new SQLiteCommand(selectTitlesSql, dbConnection);
+            
+            SQLiteCommand command = new SQLiteCommand(this.select_titles, dbConnection);
+            command.Parameters.Add(new SQLiteParameter("@user_id", userId));
             SQLiteDataReader reader = command.ExecuteReader();
             List<AccountTitle> accountTitles = new List<AccountTitle>();
             while (reader.Read())
@@ -85,9 +88,10 @@ namespace WpfPasswordManager
         public AccountDetails selectWithId(long id, long userId)
         {
             this.dbConnection.Open();
-
-            String sql = this.select_account_with_id + id + " AND user_id=" + userId;
-            SQLiteCommand command = new SQLiteCommand(sql, dbConnection);
+            
+            SQLiteCommand command = new SQLiteCommand(this.select_account_with_id, dbConnection);
+            command.Parameters.Add(new SQLiteParameter("@id", id));
+            command.Parameters.Add(new SQLiteParameter("@user_id", userId));
             SQLiteDataReader reader = command.ExecuteReader();
             AccountDetails accountDetails = new AccountDetails();
             while (reader.Read())
@@ -105,9 +109,14 @@ namespace WpfPasswordManager
         public void update(AccountDetails accountDetails, long userId)
         {
             this.dbConnection.Open();
-
-            String updateSql = this.update_account + "title='" + accountDetails.Title + "',username='" + accountDetails.Username + "',encrypted_password='" + accountDetails.EncryptedPassword + "',salt='" + accountDetails.Salt + "' WHERE id=" + accountDetails.Id + " AND user_id=" + userId;
-            SQLiteCommand command = new SQLiteCommand(updateSql, dbConnection);
+            
+            SQLiteCommand command = new SQLiteCommand(this.update_account, dbConnection);
+            command.Parameters.Add(new SQLiteParameter("@title", accountDetails.Title));
+            command.Parameters.Add(new SQLiteParameter("@username", accountDetails.Username));
+            command.Parameters.Add(new SQLiteParameter("@encrypted_password", accountDetails.EncryptedPassword));
+            command.Parameters.Add(new SQLiteParameter("@salt", accountDetails.Salt));
+            command.Parameters.Add(new SQLiteParameter("@id", accountDetails.Id));
+            command.Parameters.Add(new SQLiteParameter("@user_id", userId));
             command.ExecuteNonQuery();
             this.dbConnection.Close();
         }
@@ -115,9 +124,10 @@ namespace WpfPasswordManager
         public void delete(long id, long userId)
         {
             this.dbConnection.Open();
-
-            String deleteSql = this.delete_account + id + " AND user_id=" + userId;
-            SQLiteCommand command = new SQLiteCommand(deleteSql, dbConnection);
+            
+            SQLiteCommand command = new SQLiteCommand(this.delete_account, dbConnection);
+            command.Parameters.Add(new SQLiteParameter("@id", id));
+            command.Parameters.Add(new SQLiteParameter("@user_id", userId));
             command.ExecuteNonQuery();
             this.dbConnection.Close();
         }
@@ -128,9 +138,11 @@ namespace WpfPasswordManager
 
             String hashString = Convert.ToBase64String(hash);
             String saltString = Convert.ToBase64String(salt);
-
-            String insertSql = this.insert_user + "('" + username + "','" + hashString + "','" + saltString + "')";
-            SQLiteCommand command = new SQLiteCommand(insertSql, dbConnection);
+            
+            SQLiteCommand command = new SQLiteCommand(this.insert_user, dbConnection);
+            command.Parameters.Add(new SQLiteParameter("@username", username));
+            command.Parameters.Add(new SQLiteParameter("@hash", hashString));
+            command.Parameters.Add(new SQLiteParameter("@salt", saltString));
             command.ExecuteNonQuery();
 
             this.dbConnection.Close();
@@ -139,9 +151,9 @@ namespace WpfPasswordManager
         public List<User> selectUser(String username)
         {
             this.dbConnection.Open();
-
-            String sql = this.select_user + "'" + username + "'";
-            SQLiteCommand command = new SQLiteCommand(sql, dbConnection);
+            
+            SQLiteCommand command = new SQLiteCommand(this.select_user, dbConnection);
+            command.Parameters.Add(new SQLiteParameter("@username", username));
             SQLiteDataReader reader = command.ExecuteReader();
             List<User> users = new List<User>();
             while (reader.Read())
@@ -157,12 +169,12 @@ namespace WpfPasswordManager
             return users;
         }
 
-        public String getUserHash(long userId)
+        public String getUserHash(long id)
         {
             this.dbConnection.Open();
-
-            String sql = this.select_hash + "'" + userId + "'";
-            SQLiteCommand command = new SQLiteCommand(sql, dbConnection);
+            
+            SQLiteCommand command = new SQLiteCommand(this.select_hash, dbConnection);
+            command.Parameters.Add(new SQLiteParameter("@id", id));
             SQLiteDataReader reader = command.ExecuteReader();
             String hash = "";
             while (reader.Read())
