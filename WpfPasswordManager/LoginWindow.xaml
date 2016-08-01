@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfPasswordManager"
         mc:Ignorable="d"
-        Title="LoginWindow" Height="350" Width="525">
-    <StackPanel>
-        <TextBlock HorizontalAlignment="Center" FontSize="24">Welcome to Password Manager</TextBlock>
+        Title="LoginWindow" Height="275" Width="400"
+        >
+    <StackPanel Background="#121317">
+        <TextBlock HorizontalAlignment="Center" FontSize="24" Foreground="White" Padding="0 10 0 10" FontFamily="Agency FB">SIGN IN TO PASSWORD MANAGER</TextBlock>
         <Grid HorizontalAlignment="Center">
             <Grid.Resources>
                 <Style TargetType="TextBlock">
@@ -15,22 +16,22 @@
                 </Style>
             </Grid.Resources>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100" />
                 <ColumnDefinition Width="100" />
             </Grid.ColumnDefinitions>
-            <TextBlock>User Name:</TextBlock>
-            <TextBox Name="usernameTextBox" Grid.Column="1" Width="100"></TextBox>
-            <TextBlock Grid.Row="1">Password:</TextBlock>
-            <PasswordBox Name="passwordBox" Grid.Row="1" Grid.Column="1" Width="100"></PasswordBox>
-            <Button Click="onLoginClicked" Grid.Row="2" Grid.Column="1">Login</Button>
+            <TextBlock Foreground="White" HorizontalAlignment="Right" Padding="0 0 10 0" FontFamily="Agency FB" FontSize="16">User Name:</TextBlock>
+            <TextBox Name="usernameTextBox" Grid.Column="1" Width="100" Height="25" BorderThickness="0" Padding="5 3 5 0"></TextBox>
+            <TextBlock Grid.Row="1" Foreground="White" HorizontalAlignment="Right" Padding="0 0 10 0" FontFamily="Agency FB" FontSize="16">Password:</TextBlock>
+            <PasswordBox Name="passwordBox" Grid.Row="1" Grid.Column="1" Width="100" Height="25" BorderThickness="0" Padding="5 3 5 0"></PasswordBox>
+            <Button Click="onLoginClicked" Grid.Row="2" Grid.Column="1" Background="#e04a32" Foreground="White" Height="25" BorderThickness="0" FontFamily="Agency FB" FontSize="16">Login</Button>
         </Grid>
-        <TextBlock HorizontalAlignment="Center">No Account?</TextBlock>
-        <Button Click="onRegisterClicked" Width="100">Register</Button>
+        <TextBlock HorizontalAlignment="Center" Foreground="White" Margin="10" FontFamily="Agency FB">No Account?</TextBlock>
+        <Button Click="onRegisterClicked" Width="100" Background="#e04a32" Foreground="White" Height="25" BorderThickness="0" FontFamily="Agency FB" FontSize="16">Register</Button>
         
         
     </StackPanel>

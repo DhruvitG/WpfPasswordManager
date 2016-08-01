@@ -5,24 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfPasswordManager"
         mc:Ignorable="d"
-        Title="RegisterWindow" Height="300" Width="300">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="25" />
-            <RowDefinition Height="25" />
-            <RowDefinition Height="25" />
-            <RowDefinition Height="25" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <TextBlock>User Name:</TextBlock>
-        <TextBox Grid.Column="1" Name="usernameField"/>
-        <TextBlock Grid.Row="1">Password:</TextBlock>
-        <PasswordBox Grid.Row="1" Grid.Column="1" Name="passwordField"/>
-        <TextBlock Grid.Row="2">Confirm Password:</TextBlock>
-        <PasswordBox Grid.Row="2" Grid.Column="1" Name="confirmPasswordField"/>
-        <Button Click="onRegisterBtnClicked" Grid.Row="3" Grid.Column="1">Register</Button>
-    </Grid>
+        Title="RegisterWindow" Height="225" Width="300">
+    <StackPanel Background="#121317">
+        <TextBlock Foreground="White" HorizontalAlignment="Center" FontFamily="Agency FB" FontSize="20" Height="40" Padding="6">Create an Account</TextBlock>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="125" />
+                <ColumnDefinition Width="175" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Foreground="White" FontFamily="Agency FB" FontSize="16" HorizontalAlignment="Right" Padding="0 5 10 0">User Name:</TextBlock>
+            <TextBox Grid.Column="1" Name="usernameField" Height="25" BorderThickness="0" Width="130" HorizontalAlignment="Left" Padding="5 3 5 0"/>
+            <TextBlock Grid.Row="1" Foreground="White" FontFamily="Agency FB" FontSize="16" HorizontalAlignment="Right" Padding="0 5 10 0">Password:</TextBlock>
+            <PasswordBox Grid.Row="1" Grid.Column="1" Name="passwordField" Height="25" BorderThickness="0" Width="130" HorizontalAlignment="Left" Padding="5 3 5 0"/>
+            <TextBlock Grid.Row="2" Foreground="White" FontFamily="Agency FB" FontSize="16" HorizontalAlignment="Right" Padding="0 5 10 0">Confirm Password:</TextBlock>
+            <PasswordBox Grid.Row="2" Grid.Column="1" Name="confirmPasswordField" Height="25" BorderThickness="0" Width="130" HorizontalAlignment="Left" Padding="5 3 5 0"/>
+            <Button Click="onRegisterBtnClicked" Grid.Row="3" Grid.Column="1" Foreground="White" Height="25" Background="#e04a32" Width="130" HorizontalAlignment="Left" BorderThickness="0" FontFamily="Agency FB" FontSize="16">Register</Button>
+        </Grid>
+    </StackPanel>
 </Window>
