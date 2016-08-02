@@ -5,28 +5,32 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfPasswordManager"
         mc:Ignorable="d"
-        Title="AccountDetailsWindow" Height="300" Width="300">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="25" />
-            <RowDefinition Height="25" />
-            <RowDefinition Height="25" />
-            <RowDefinition Height="25" />
-            <RowDefinition Height="25" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <TextBlock>Title:</TextBlock>
-        <TextBox Grid.Column="1" Name="titleField"/>
-        <TextBlock Grid.Row="1">User Name:</TextBlock>
-        <TextBox Grid.Row="1"  Grid.Column="1" Name="usernameField"/>
-        <TextBlock Grid.Row="2">Password:</TextBlock>
-        <TextBox Grid.Row="2" Grid.Column="1" Name="textPasswordField" Visibility="Hidden"/>
-        <PasswordBox Grid.Row="2" Grid.Column="1" Name="passwordField"/>
-        <CheckBox Grid.Row="3" Grid.Column="1" Name="passwordCheckBox" Click="onCheckBoxClicked">Show Password</CheckBox>
-        <Button Click="onCancelBtnClicked" Grid.Row="4" Grid.Column="0">Cancel</Button>
-        <Button Click="onSaveBtnClicked" Grid.Row="4" Grid.Column="1">Save</Button>
-    </Grid>
+        Title="AccountDetailsWindow" Height="275" Width="300">
+    <StackPanel Background="#121317">
+        <TextBlock Foreground="White" Height="40" HorizontalAlignment="Center" FontFamily="Agency FB" FontSize="20" Padding="5">Account Details</TextBlock>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="125" />
+                <ColumnDefinition Width="175" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Foreground="White" HorizontalAlignment="Right" FontSize="16" FontFamily="Agency FB" Padding="0 5 10 0">Title:</TextBlock>
+            <TextBox Grid.Column="1" Name="titleField" Height="25" BorderThickness="0" Width="130" HorizontalAlignment="Left" Padding="5 3 5 0"/>
+            <TextBlock Grid.Row="1" Foreground="White" HorizontalAlignment="Right" FontSize="16" FontFamily="Agency FB" Padding="0 5 10 0">User Name:</TextBlock>
+            <TextBox Grid.Row="1"  Grid.Column="1" Name="usernameField" Height="25" BorderThickness="0" Width="130" HorizontalAlignment="Left" Padding="5 3 5 0"/>
+            <TextBlock Grid.Row="2" Foreground="White" HorizontalAlignment="Right" FontSize="16" FontFamily="Agency FB" Padding="0 5 10 0">Password:</TextBlock>
+            <TextBox Grid.Row="2" Grid.Column="1" Name="textPasswordField" Visibility="Hidden" Height="25" BorderThickness="0" Width="130" HorizontalAlignment="Left" Padding="5 3 5 0"/>
+            <PasswordBox Grid.Row="2" Grid.Column="1" Name="passwordField" Height="25" BorderThickness="0" Width="130" HorizontalAlignment="Left" Padding="5 3 5 0"/>
+            <CheckBox Grid.Row="3" Grid.Column="1" Name="passwordCheckBox" Click="onCheckBoxClicked" Foreground="White" FontSize="14" FontFamily="Agency FB" Margin="5" BorderThickness="1" BorderBrush="#e04a32">Show Password</CheckBox>
+            <Button Click="onCancelBtnClicked" Grid.Row="4" Grid.Column="1" Width="60" HorizontalAlignment="Left" Background="#e04a32" Foreground="White" BorderThickness="0">Cancel</Button>
+            <Button Click="onSaveBtnClicked" Grid.Row="4" Grid.Column="1" Width="60" Margin="20 0 0 0" Background="#e04a32" Foreground="White" BorderThickness="0">Save</Button>
+        </Grid>
+    </StackPanel>
+    
 </Window>
