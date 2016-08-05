@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SQLite;
+using System.IO;
 
 namespace WpfPasswordManager
 {
@@ -36,19 +37,26 @@ namespace WpfPasswordManager
 
         private SQLiteDbHelper()
         {
-            //if file doesn't exist
-            SQLiteConnection.CreateFile("MyDatabase.sqlite");
+            if (!File.Exists("MyDatabase.sqlite"))
+            {
+                SQLiteConnection.CreateFile("MyDatabase.sqlite");
 
-            // connect to database
-            this.dbConnection = new SQLiteConnection("Data Source=MyDatabase.sqlite;Version=3;");
-            this.dbConnection.Open();
+                // connect to database
+                this.dbConnection = new SQLiteConnection("Data Source=MyDatabase.sqlite;Version=3;");
+                this.dbConnection.Open();
 
-            // create tables
-            SQLiteCommand command = new SQLiteCommand(create_accounts_table, dbConnection);
-            command.ExecuteNonQuery();
+                SQLiteCommand command = new SQLiteCommand(create_accounts_table, dbConnection);
+                command.ExecuteNonQuery();
 
-            command = new SQLiteCommand(create_users_table, dbConnection);
-            command.ExecuteNonQuery();
+                command = new SQLiteCommand(create_users_table, dbConnection);
+                command.ExecuteNonQuery();
+            }
+            else
+            {
+                // connect to database
+                this.dbConnection = new SQLiteConnection("Data Source=MyDatabase.sqlite;Version=3;");
+                this.dbConnection.Open();
+            }
 
             this.dbConnection.Close();
         }
